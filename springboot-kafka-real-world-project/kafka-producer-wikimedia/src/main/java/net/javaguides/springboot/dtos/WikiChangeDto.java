@@ -3,7 +3,6 @@ package net.javaguides.springboot.dtos;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WikiChangeDto {
@@ -11,7 +10,7 @@ public class WikiChangeDto {
     @JsonProperty("$schema")
     public String schema;
 
-    // public Meta meta;
+    public Meta meta;
 
     public Long id;
     public String type;

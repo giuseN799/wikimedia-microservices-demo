@@ -22,20 +22,17 @@ public class WikimediaChangesHandler implements BackgroundEventHandler{
 
   @Override
   public void onClosed() throws Exception {
-    // TODO Auto-generated method stub
-    
+    // Ignore
   }
 
   @Override
   public void onComment(String comment) throws Exception {
-    // TODO Auto-generated method stub
-    
+    // Ignore
   }
 
   @Override
   public void onError(Throwable t) {
-    // TODO Auto-generated method stub
-    
+    //Ignore    
   }
 
   @Override
@@ -52,7 +49,7 @@ public class WikimediaChangesHandler implements BackgroundEventHandler{
 
   @Override
   public void onOpen() throws Exception {
-    // TODO Auto-generated method stub
+    // Ignore
     
   }
   

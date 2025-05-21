@@ -3,6 +3,7 @@ package net.javaguides.springboot.entities;
 
 import java.sql.Timestamp;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,9 @@ import net.javaguides.springboot.dtos.Meta;
 @Builder
 public class WikiChange {
   private TransactionStatus status;
+
+  // @Embedded
+  // private Meta meta;
 
   @Id
   private String uuid;

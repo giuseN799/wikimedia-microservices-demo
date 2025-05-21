@@ -10,12 +10,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import net.javaguides.springboot.dtos.ModerationRequestDto;
-import net.javaguides.springboot.dtos.WikiChangeFull;
-import net.javaguides.springboot.dtos.WikiTextChangeDto;
 import net.javaguides.springboot.dtos.WikiChangeDto;
 import net.javaguides.springboot.entities.TransactionStatus;
 import net.javaguides.springboot.entities.WikiChange;
-import net.javaguides.springboot.producers.KafkaChangeProducer;
 import net.javaguides.springboot.producers.KafkaModeratorProducer;
 import net.javaguides.springboot.repository.WikiChangeRepository;
 
@@ -24,7 +21,7 @@ import net.javaguides.springboot.repository.WikiChangeRepository;
 public class KafkaDatabaseConsumer {
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaDatabaseConsumer.class);
 
-  private KafkaTemplate<String, WikiTextChangeDto> kafkaTemplate;
+  // private KafkaTemplate<String, WikiTextChangeDto> kafkaTemplate;
 
   private KafkaTemplate<String, ModerationRequestDto> kafkaModTemplate;
 
@@ -35,9 +32,10 @@ public class KafkaDatabaseConsumer {
 
     UUID uuid = UUID.randomUUID();
     // Start Transaction
+
     WikiChange newChange = buildWikiChange(wikiChangeDto, uuid.toString());
     
-    wikiChangeRepository.save(newChange);
+    try { wikiChangeRepository.save(newChange);
     // Turn the complex super Json into orchestrated API JSON loads
     // Invoke the two producers create the WikiTextChangeDto
     // KafkaChangeProducer kafkaChangeProducer = new KafkaChangeProducer(kafkaTemplate);
@@ -50,10 +48,12 @@ public class KafkaDatabaseConsumer {
     // // Save 
     newChange.setStatus(TransactionStatus.PENDING);
     wikiChangeRepository.saveAndFlush(newChange);
+    } catch (Exception e){
+      // Ignore Exceptions.
+    }
     
   }
   private WikiChange buildWikiChange(WikiChangeDto wikiChangeDto, String uuid ) {
-    // TODO Auto-generated method stub
     return WikiChange.builder().status(TransactionStatus.STARTED)
                         .bot(wikiChangeDto.bot)
                         .comment(wikiChangeDto.comment)

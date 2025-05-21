@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import net.javaguides.springboot.dtos.ApproveRejectDto;
 import net.javaguides.springboot.dtos.Note;
 import net.javaguides.springboot.dtos.NoteRequest;
-import net.javaguides.springboot.dtos.WikiChangeDto;
 import net.javaguides.springboot.entities.TransactionStatus;
 import net.javaguides.springboot.entities.WikiChange;
 import net.javaguides.springboot.repository.WikiChangeRepository;
@@ -30,6 +29,7 @@ public class ModerationConsumer {
         
         // Update the wiki_change db
         Optional<WikiChange> change = wikiChangeRepository.findById(modDecision.getUuid());
+        
         if(!change.isPresent()) return;
         change.get().setStatus(TransactionStatus.valueOf(modDecision.getStatus().toUpperCase()));
         wikiChangeRepository.save(change.get());
@@ -41,6 +41,7 @@ public class ModerationConsumer {
         note.setContent(change.get().getComment());
         noteRequest.setNote(note);
         noteRequest.setUuid(change.get().getUuid());
-        webClient.sendNoteWithRetry(noteRequest);
+        webClient.sendNoteWithRetry(noteRequest).doOnError(err -> System.err.println("Final failure: " + err.getMessage())).subscribe();
+        LOGGER.info("Sent to Approval service.");
     }
 }

@@ -4,8 +4,6 @@ package net.javaguides.springboot;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +16,6 @@ import net.javaguides.springboot.dtos.WikiChangeDto;
 
 @Service
 public class WikimediaChangesProducer {
-  private static final Logger LOGGER = LoggerFactory.getLogger(WikimediaChangesProducer.class);
 
   private KafkaTemplate<String, WikiChangeDto> kafkaTemplate;
 

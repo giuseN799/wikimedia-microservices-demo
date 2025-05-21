@@ -3,8 +3,8 @@ package net.javaguides.springboot.entities;
 public enum TransactionStatus {
   STARTED,
   PENDING,
-  REJECTED,
-  APPROVED,
+  REJECT,
+  APPROVE,
   COMPLETED,
   REVERTED
 }

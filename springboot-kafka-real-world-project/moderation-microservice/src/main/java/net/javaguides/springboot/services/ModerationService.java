@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -23,6 +24,7 @@ public class ModerationService {
 
   private final ModerationRequestRepository requestRepository;
 
+  @Autowired
   private KafkaTemplate<String, ApproveRejectDto> kafkaTemplate;
 
   public List<ModerationRequestDto> getProposedChanges(int page, int size) {

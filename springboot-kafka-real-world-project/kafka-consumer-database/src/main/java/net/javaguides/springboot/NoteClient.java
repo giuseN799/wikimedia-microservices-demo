@@ -15,10 +15,9 @@ import reactor.util.retry.Retry;
 public class NoteClient {
 
     private final WebClient webClient;
-    private final Random random = new Random();
 
     public NoteClient(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl("http://localhost:8080").build();
+        this.webClient = builder.baseUrl("http://localhost:8082").build();
     }
 
     public Mono<Void> sendNoteWithRetry(NoteRequest noteRequest) {

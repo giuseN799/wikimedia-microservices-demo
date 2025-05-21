@@ -22,6 +22,7 @@ public class NoteController {
 
     @PostMapping
     public Mono<ResponseEntity<String>> createNote(@RequestBody NoteRequest request) {
+        System.out.println("Post endpoints hit.");
         return noteService.saveNoteWithRetry(request)
             .map(result -> ResponseEntity.ok("Note saved"))
             .onErrorResume(ex -> Mono.just(ResponseEntity.status(500).body("Failed to save note")));
