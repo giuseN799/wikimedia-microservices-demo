@@ -1,10 +1,11 @@
 package net.javaguides.springboot.entities;
 
 
-import java.sql.Timestamp;
-
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,46 +13,49 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.javaguides.springboot.dtos.Meta;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Builder
 public class WikiChange {
-  private TransactionStatus status;
 
-  // @Embedded
-  // private Meta meta;
+    private TransactionStatus status;
+    @Id
+    private String uuid; 
 
-  @Id
-  private String uuid;
+    private String schema;
 
-  private String schema;
+    private Long id;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "meta_id")),
+        @AttributeOverride(name = "requestId", column = @Column(name = "meta_request_id"))
+    })
+    private Meta meta;
 
-  private Long id;
-  private String type;
-  private Integer namespace;
-  private String title;
+    private String type;
+    private Integer namespace;    private String title;
 
-  private String titleUrl;
+    private String titleUrl;
 
-  private String comment;
-  private Timestamp timestamp;
-  private String userName;
-  private Boolean bot;
+    private String comment;
+    private Long timestamp;
+    private String user;
+    private Boolean bot;
 
-  private String notifyUrl;
+    private String notifyUrl;
 
-  private Boolean minor;
-  private Boolean patrolled;
+    private Boolean minor;
+    private Boolean patrolled;
 
-  private String serverUrl;
+    private String serverUrl;
 
-  private String serverName;
+    private String serverName;
 
-  private String serverScriptPath;
+    private String serverScriptPath;
 
-  private String wiki;
+    private String wiki;
 
-  private String parsedcomment;
+    private String parsedcomment;
 }

@@ -20,7 +20,13 @@ import net.javaguides.springboot.repository.WikiChangeRepository;
 @AllArgsConstructor
 public class ModerationConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaDatabaseConsumer.class);
-    
+
+    private final NoteClient noteClient;
+
+    public ModerationConsumer(NoteClient noteClient) {
+        this.noteClient = noteClient;
+    }
+
     private WikiChangeRepository wikiChangeRepository;
 
     @KafkaListener(topics = "change_approve_reject", groupId = "myGroup")
@@ -34,14 +40,13 @@ public class ModerationConsumer {
         change.get().setStatus(TransactionStatus.valueOf(modDecision.getStatus().toUpperCase()));
         wikiChangeRepository.save(change.get());
         // Send a POST To Notes Microservice
-        NoteClient webClient = new NoteClient(WebClient.builder());
         NoteRequest noteRequest = new NoteRequest();
         Note note = new Note();
-        note.setAuthor(change.get().getUserName());
+        note.setAuthor(change.get().getUser());
         note.setContent(change.get().getComment());
         noteRequest.setNote(note);
         noteRequest.setUuid(change.get().getUuid());
-        webClient.sendNoteWithRetry(noteRequest).doOnError(err -> System.err.println("Final failure: " + err.getMessage())).subscribe();
+        noteClient.sendNoteWithRetry(noteRequest).doOnError(err -> System.err.println("Final failure: " + err.getMessage())).subscribe();
         LOGGER.info("Sent to Approval service.");
     }
 }

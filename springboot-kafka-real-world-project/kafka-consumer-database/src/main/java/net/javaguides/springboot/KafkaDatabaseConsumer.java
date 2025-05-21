@@ -58,7 +58,7 @@ public class KafkaDatabaseConsumer {
                         .bot(wikiChangeDto.bot)
                         .comment(wikiChangeDto.comment)
                         .notifyUrl(wikiChangeDto.notifyUrl)
-                        .userName(wikiChangeDto.user)
+                        .user(wikiChangeDto.user)
                         .id(wikiChangeDto.id)
                         .uuid(uuid)
                         .build();

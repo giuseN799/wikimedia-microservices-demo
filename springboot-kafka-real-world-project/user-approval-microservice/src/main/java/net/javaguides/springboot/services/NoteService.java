@@ -3,7 +3,6 @@ package net.javaguides.springboot.services;
 import java.time.Duration;
 import java.util.Random;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import net.javaguides.springboot.dtos.NoteRequest;

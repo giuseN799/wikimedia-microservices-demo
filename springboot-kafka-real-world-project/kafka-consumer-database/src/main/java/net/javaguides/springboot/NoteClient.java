@@ -1,12 +1,13 @@
 package net.javaguides.springboot;
 
 import java.time.Duration;
-import java.util.Random;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
 import net.javaguides.springboot.dtos.NoteRequest;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
@@ -15,9 +16,11 @@ import reactor.util.retry.Retry;
 public class NoteClient {
 
     private final WebClient webClient;
+    private final CircuitBreaker circuitBreaker;
 
-    public NoteClient(WebClient.Builder builder) {
+    public NoteClient(WebClient.Builder builder, CircuitBreaker circuitBreaker) {
         this.webClient = builder.baseUrl("http://localhost:8082").build();
+        this.circuitBreaker = circuitBreaker;
     }
 
     public Mono<Void> sendNoteWithRetry(NoteRequest noteRequest) {
@@ -27,10 +30,21 @@ public class NoteClient {
                 .bodyValue(noteRequest)
                 .retrieve()
                 .bodyToMono(String.class)
-                .doOnNext(body -> System.out.println("Response: " + body))
+                .transformDeferred(CircuitBreakerOperator.of(circuitBreaker)) // <- Circuit breaker here
                 .retryWhen(jitteredBackoffRetry(5, Duration.ofSeconds(1)))
+                .doOnNext(body -> System.out.println("Response: " + body))
+                .onErrorResume(e -> {
+                    System.err.println("Final failure or circuit open: " + e.getMessage());
+                    return fallbackMono(); // Fallback logic
+                })
                 .then();
     }
+
+    private Mono<String> fallbackMono() {
+        return Mono.just("Fallback: service unavailable");
+    }
+
+
 
     private Retry jitteredBackoffRetry(int maxRetries, Duration baseDelay) {
         return Retry.backoff(maxRetries, baseDelay)
