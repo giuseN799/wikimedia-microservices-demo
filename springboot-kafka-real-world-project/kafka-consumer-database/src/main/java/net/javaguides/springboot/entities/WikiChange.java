@@ -30,18 +30,20 @@ public class WikiChange {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "id", column = @Column(name = "meta_id")),
+        @AttributeOverride(name = "offset", column = @Column(name = "meta_offset")),
         @AttributeOverride(name = "requestId", column = @Column(name = "meta_request_id"))
     })
     private Meta meta;
 
     private String type;
-    private Integer namespace;    private String title;
+    private Integer namespace;    
+    private String title;
 
     private String titleUrl;
 
     private String comment;
     private Long timestamp;
-    private String user;
+    private String userName;
     private Boolean bot;
 
     private String notifyUrl;

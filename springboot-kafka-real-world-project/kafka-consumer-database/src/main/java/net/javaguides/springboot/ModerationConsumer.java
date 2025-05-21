@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.javaguides.springboot.dtos.ApproveRejectDto;
 import net.javaguides.springboot.dtos.Note;
 import net.javaguides.springboot.dtos.NoteRequest;
@@ -23,11 +24,7 @@ public class ModerationConsumer {
 
     private final NoteClient noteClient;
 
-    public ModerationConsumer(NoteClient noteClient) {
-        this.noteClient = noteClient;
-    }
-
-    private WikiChangeRepository wikiChangeRepository;
+    private final WikiChangeRepository wikiChangeRepository;
 
     @KafkaListener(topics = "change_approve_reject", groupId = "myGroup")
     public void consumer(ApproveRejectDto modDecision){
@@ -42,7 +39,7 @@ public class ModerationConsumer {
         // Send a POST To Notes Microservice
         NoteRequest noteRequest = new NoteRequest();
         Note note = new Note();
-        note.setAuthor(change.get().getUser());
+        note.setAuthor(change.get().getUserName());
         note.setContent(change.get().getComment());
         noteRequest.setNote(note);
         noteRequest.setUuid(change.get().getUuid());

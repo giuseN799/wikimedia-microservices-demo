@@ -13,7 +13,7 @@ public class Meta {
     @JsonProperty("request_id")
     public String requestId;
 
-    // public String id;
+    public String id;
     public String dt;
     public String domain;
     public String stream;

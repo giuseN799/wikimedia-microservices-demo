@@ -35,7 +35,8 @@ public class KafkaDatabaseConsumer {
 
     WikiChange newChange = buildWikiChange(wikiChangeDto, uuid.toString());
     
-    try { wikiChangeRepository.save(newChange);
+    try { 
+    wikiChangeRepository.save(newChange);
     // Turn the complex super Json into orchestrated API JSON loads
     // Invoke the two producers create the WikiTextChangeDto
     // KafkaChangeProducer kafkaChangeProducer = new KafkaChangeProducer(kafkaTemplate);
@@ -58,7 +59,7 @@ public class KafkaDatabaseConsumer {
                         .bot(wikiChangeDto.bot)
                         .comment(wikiChangeDto.comment)
                         .notifyUrl(wikiChangeDto.notifyUrl)
-                        .user(wikiChangeDto.user)
+                        .userName(wikiChangeDto.user)
                         .id(wikiChangeDto.id)
                         .uuid(uuid)
                         .build();
