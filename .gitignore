@@ -1,0 +1,41 @@
+# Build outputs
+target/
+bin/
+build/
+out/
+
+# IDE specific files
+.idea/
+.classpath
+.project
+*.iml
+nbproject/
+.vscode/
+
+# Executables and archives
+*.jar
+*.war
+*.ear
+*.zip
+*.rar
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependency caches
+.gradle/
+
+# Configuration files (sensitive)
+*.properties
+application.yml
+application.properties
+
+# VM crash logs
+hs_err_pid*
+
+# Temporary files
+*.tmp
